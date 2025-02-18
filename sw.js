@@ -4,12 +4,14 @@ const CACHE_EXPIRATION = 24 * 60 * 60 * 1000; // 24 hours
 
 // Core assets to cache
 const REPO_NAME = '/sct';
-const STATIC_ASSETS = [ `${REPO_NAME}/`, `${REPO_NAME}/index.html`, `${REPO_NAME}/pit.html`,
-    `${REPO_NAME}/2025/field_image.png`,`${REPO_NAME}/2025/reefscape_config.js`,`${REPO_NAME}/2025/reefscape_pit_scouting.js`,
-    `${REPO_NAME}/resources/css/style.css`, `${REPO_NAME}/resources/js/scoutingApp.js`,
-    `${REPO_NAME}/resources/js/easy.qrcode.min.js`,`${REPO_NAME}/resources/js/TBAInterface.js`,
-    `${REPO_NAME}/resources/images/favicon.ico`, `${REPO_NAME}/resources/images/field_location_key.png`,
-    `${REPO_NAME}/resources/fonts/alex.woff`,`${REPO_NAME}/resources/fonts/alexisv3.ttf`];
+const STATIC_ASSETS = [
+  `${REPO_NAME}/`, `${REPO_NAME}/index.html`, `${REPO_NAME}/pit.html`,
+  `${REPO_NAME}/2025/field_image.png`, `${REPO_NAME}/2025/reefscape_config.js`, `${REPO_NAME}/2025/reefscape_pit_scouting.js`,
+  `${REPO_NAME}/resources/css/style.css`, `${REPO_NAME}/resources/js/scoutingApp.js`,
+  `${REPO_NAME}/resources/js/easy.qrcode.min.js`, `${REPO_NAME}/resources/js/TBAInterface.js`,
+  `${REPO_NAME}/resources/images/favicon.ico`, `${REPO_NAME}/resources/images/field_location_key.png`,
+  `${REPO_NAME}/resources/fonts/alex.woff`, `${REPO_NAME}/resources/fonts/alexisv3.ttf`
+];
 
 // Service Worker Installation
 self.addEventListener('install', (event) => {
@@ -61,7 +63,7 @@ self.addEventListener('activate', (event) => {
 self.addEventListener('fetch', (event) => {
   const url = new URL(event.request.url);
   console.log('📡 Fetch request for:', url.pathname);
-  
+
   if (event.request.mode === 'navigate') {
     console.log('🧭 Navigation request detected');
     event.respondWith(handleNavigationRequest(event));
@@ -95,7 +97,7 @@ async function handleNavigationRequest(event) {
       return cachedResponse;
     }
     console.error('❌ No cached version found');
-    return Response.error();
+    return new Response('Offline and no cached version available', { status: 503, statusText: 'Service Unavailable' });
   }
 }
 
@@ -103,7 +105,7 @@ async function handleStaticAssetRequest(event) {
   console.log('📦 Handling static asset:', event.request.url);
   const cache = await caches.open(STATIC_CACHE);
   const cachedResponse = await cache.match(event.request);
-  
+
   if (cachedResponse) {
     console.log('✅ Found in cache:', event.request.url);
     // Background cache update
@@ -119,9 +121,15 @@ async function handleStaticAssetRequest(event) {
       .catch(error => console.log('ℹ️ Background update failed:', error));
     return cachedResponse;
   }
-  
+
   console.log('🌐 Fetching from network:', event.request.url);
-  return fetch(event.request);
+  try {
+    const networkResponse = await fetch(event.request);
+    return networkResponse;
+  } catch (error) {
+    console.error('❌ Network fetch failed and no cached version available');
+    return new Response('Offline and no cached version available', { status: 503, statusText: 'Service Unavailable' });
+  }
 }
 
 // Cache cleanup
@@ -129,7 +137,7 @@ setInterval(async () => {
   console.log('🧹 Running cache cleanup');
   const cache = await caches.open(API_CACHE);
   const requests = await cache.keys();
-  
+
   requests.forEach(async request => {
     const cacheTime = await getCacheTime(request);
     if (Date.now() - cacheTime > CACHE_EXPIRATION) {
