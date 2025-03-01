@@ -1,4 +1,4 @@
-const STATIC_CACHE = 'static-v5';
+const STATIC_CACHE = 'static-v6';
 const API_CACHE = 'api-v3';
 const CACHE_EXPIRATION = 24 * 60 * 60 * 1000; // 24 hours
 
