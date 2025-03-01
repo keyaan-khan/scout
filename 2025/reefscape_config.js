@@ -26,7 +26,8 @@ var config_data = `
         "code": "l",
         "type": "level",
         "choices": {
-          "qm": "Quals<br>"
+          "qm": "Quals<br>",
+          
         },
         "defaultValue": "qm",
         "required": "true"
