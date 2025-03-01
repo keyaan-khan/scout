@@ -27,6 +27,8 @@ var config_data = `
         "type": "level",
         "choices": {
           "qm": "Quals<br>",
+          "sf": "Semifinals<br>",
+          "f": "Finals"
         },
         "defaultValue": "qm",
         "required": "true"
@@ -78,13 +80,8 @@ var config_data = `
         "type": "bool"
       },
       {
-        "name": "Coral L4",
-        "code": "acl4",
-        "type": "counter"
-      },
-      {
-        "name": "Coral L3",
-        "code": "acl3",
+        "name": "Coral L1 (Trough)",
+        "code": "acl1",
         "type": "counter"
       },
       {
@@ -93,8 +90,13 @@ var config_data = `
         "type": "counter"
       },
       {
-        "name": "Coral L1 (Trough)",
-        "code": "acl1",
+        "name": "Coral L3",
+        "code": "acl3",
+        "type": "counter"
+      },
+      {
+        "name": "Coral L4",
+        "code": "acl4",
         "type": "counter"
       },
       {
@@ -168,10 +170,10 @@ var config_data = `
         "code": "fp",
         "type": "radio",
         "choices": {
-          "p": "Parked in Barge Zone<br>",
-          "s": "Shallow Cage<br>",
-          "d": "Deep Cage<br>",
-          "a": "Attempted but Failed<br>",
+          "p": "Parked in Barge Zone",
+          "s": "Shallow Cage",
+          "d": "Deep Cage",
+          "a": "Attempted but Failed",
           "x": "Not Attempted"
         },
         "defaultValue": "x"

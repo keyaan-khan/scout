@@ -7,7 +7,6 @@ var xThreshold = 0.3;
 var slide = 0;
 var pitScouting = false;
 var checkboxAs = 'YN';
-var ColWidth = '200px';
 
 // Options
 var options = {
@@ -35,20 +34,17 @@ function addTimer(table, idx, name, data) {
     cell1.setAttribute("title", data.tooltip);
   }
 
-  idx += 1;
+  idx += 1
   row = table.insertRow(idx);
-  var cell = row.insertCell(0);
+  cell = row.insertCell(0);
   cell.setAttribute("colspan", 2);
   cell.setAttribute("style", "text-align: center;");
 
-  // For cycle timers, create hidden field to capture cycle times
   if (data.type == 'cycle') {
     var ct = document.createElement('input');
     ct.setAttribute("type", "hidden");
     ct.setAttribute("id", "cycletime_" + data.code);
-    // ADDED: name attribute so value is captured in getData()
     ct.setAttribute("name", data.code);
-    //ct.setAttribute("name", "cycletime_" + data.code);
     ct.setAttribute("value", "[]");
     cell.appendChild(ct);
 
@@ -81,7 +77,7 @@ function addTimer(table, idx, name, data) {
   if (data.type != 'cycle') {
     inp.setAttribute("name", data.code);
   }
-  inp.setAttribute("style", "background-color: black; color: white;border: none; text-align: center;");
+ // inp.setAttribute("style", "background-color: black; color: white;border: none; text-align: center;");
   inp.setAttribute("disabled", "");
   inp.setAttribute("value", 0);
   inp.setAttribute("size", 7);
@@ -114,7 +110,7 @@ function addTimer(table, idx, name, data) {
     cell.appendChild(button4);
   }
 
-  idx += 1;
+  idx += 1
   row = table.insertRow(idx);
   row.setAttribute("style", "display:none");
   cell = row.insertCell(0);
@@ -125,6 +121,7 @@ function addTimer(table, idx, name, data) {
   inp.setAttribute("id", "status_" + data.code);
   inp.setAttribute("value", "stopped");
   cell.appendChild(inp);
+
   inp = document.createElement('input');
   inp.setAttribute("hidden", "");
   inp.setAttribute("id", "intervalId_" + data.code);
@@ -133,7 +130,7 @@ function addTimer(table, idx, name, data) {
 
   if (data.hasOwnProperty('defaultValue')) {
     var def = document.createElement("input");
-    def.setAttribute("id", "default_" + data.code);
+    def.setAttribute("id", "default_" + data.code)
     def.setAttribute("type", "hidden");
     def.setAttribute("value", data.defaultValue);
     cell2.appendChild(def);
@@ -145,14 +142,12 @@ function addTimer(table, idx, name, data) {
 function addCounter(table, idx, name, data) {
   var row = table.insertRow(idx);
   var cell1 = row.insertCell(0);
-  cell1.style.width = ColWidth;
-  cell1.classList.add("title");
+  cell1.setAttribute("style", "background-color: black; color: white;text-align: right;");
   if (!data.hasOwnProperty('code')) {
     cell1.innerHTML = `Error: No code specified for ${name}`;
     return idx + 1;
   }
   var cell2 = row.insertCell(1);
-  cell2.style.width = ColWidth;
   cell1.innerHTML = name + '&nbsp;';
   if (data.hasOwnProperty('tooltip')) {
     cell1.setAttribute("title", data.tooltip);
@@ -163,46 +158,44 @@ function addCounter(table, idx, name, data) {
   button1.setAttribute("type", "button");
   button1.setAttribute("id", "minus_" + data.code);
   button1.setAttribute("onclick", "counter(this.parentElement, -1)");
-  button1.setAttribute("value", "-");
-  button1.setAttribute("style", "font-size: 20px; padding: 8px 16px; border: 2px solid red; border-radius: 4px; cursor: pointer;");
+  button1.setAttribute("value", "<");
+  button1.classList.add("counter-btn", "prev");
   cell2.appendChild(button1);
 
   var inp = document.createElement("input");
   inp.classList.add("counter");
   inp.setAttribute("id", "input_" + data.code);
-  inp.setAttribute("type", "text");
+  //inp.setAttribute("type", "text");
   inp.setAttribute("name", data.code);
   inp.setAttribute("style", "background-color: black; color: white;border: none; text-align: center;");
-  inp.setAttribute("disabled", "");
-  inp.setAttribute("value", 0);
+ // inp.setAttribute("disabled", "");
+  //inp.setAttribute("value", 0);
   inp.setAttribute("size", 2);
   inp.setAttribute("maxLength", 2);
+  button1.classList.add("count");
   cell2.appendChild(inp);
 
   var button2 = document.createElement("input");
   button2.setAttribute("type", "button");
   button2.setAttribute("id", "plus_" + data.code);
   button2.setAttribute("onclick", "counter(this.parentElement, 1)");
-  button2.setAttribute("value", "+");
-  button2.setAttribute("style", "font-size: 20px; padding: 8px 16px; border: 2px solid green; border-radius: 4px; cursor: pointer;");
+  button2.setAttribute("value", ">");
+  button2.classList.add("counter-btn", "next");
   cell2.appendChild(button2);
 
   if (data.hasOwnProperty('cycleTimer')) {
     if (data.cycleTimer != "") {
-      var cycleInp = document.createElement('input');
-      cycleInp.setAttribute("hidden", "");
-      cycleInp.setAttribute("id", "cycleTimer_" + data.code);
-      // ADDED: name attribute so value is captured
-      cycleInp.setAttribute("name", "cycleTimer_" + data.code);
-      cycleInp.setAttribute("value", data.cycleTimer);
-      // Append to cell2 so it's part of the form data
-      cell2.appendChild(cycleInp);
+      inp = document.createElement('input');
+      inp.setAttribute("hidden", "");
+      inp.setAttribute("id", "cycleTimer_" + data.code);
+      inp.setAttribute("value", data.cycleTimer);
+      cell.appendChild(inp);
     }
   }
 
   if (data.hasOwnProperty('defaultValue')) {
     var def = document.createElement("input");
-    def.setAttribute("id", "default_" + data.code);
+    def.setAttribute("id", "default_" + data.code)
     def.setAttribute("type", "hidden");
     def.setAttribute("value", data.defaultValue);
     cell2.appendChild(def);
@@ -396,14 +389,12 @@ function addClickableImage(table, idx, name, data) {
 function addText(table, idx, name, data) {
   var row = table.insertRow(idx);
   var cell1 = row.insertCell(0);
-  cell1.style.width = ColWidth;
   cell1.classList.add("title");
   if (!data.hasOwnProperty('code')) {
     cell1.innerHTML = `Error: No code specified for ${name}`;
     return idx + 1;
   }
   var cell2 = row.insertCell(1);
-  cell2.style.width = ColWidth;
   cell1.innerHTML = name + '&nbsp;';
   if (data.hasOwnProperty('tooltip')) {
     cell1.setAttribute("title", data.tooltip);
@@ -447,14 +438,12 @@ function addText(table, idx, name, data) {
 function addNumber(table, idx, name, data) {
   var row = table.insertRow(idx);
   var cell1 = row.insertCell(0);
-  cell1.style.width = ColWidth;
   cell1.classList.add("title");
   if (!data.hasOwnProperty('code')) {
     cell1.innerHTML = `Error: No code specified for ${name}`;
     return idx + 1;
   }
   var cell2 = row.insertCell(1);
-  cell2.style.width = ColWidth;
   cell1.innerHTML = name + '&nbsp;';
   if (data.hasOwnProperty('tooltip')) {
     cell1.setAttribute("title", data.tooltip);
@@ -508,14 +497,12 @@ function addNumber(table, idx, name, data) {
 function addRadio(table, idx, name, data) {
   var row = table.insertRow(idx);
   var cell1 = row.insertCell(0);
-  cell1.style.width = ColWidth;
   cell1.classList.add("title");
   if (!data.hasOwnProperty('code')) {
     cell1.innerHTML = `Error: No code specified for ${name}`;
     return idx + 1;
   }
   var cell2 = row.insertCell(1);
-  cell2.style.width = ColWidth;
   cell1.innerHTML = name + '&nbsp;';
   if (data.hasOwnProperty('tooltip')) {
     cell1.setAttribute("title", data.tooltip);
@@ -538,7 +525,6 @@ function addRadio(table, idx, name, data) {
       inp.setAttribute("type", "radio");
       inp.setAttribute("name", data.code);
       inp.setAttribute("value", c);
-      inp.className = "large-radio";
       if (checked == c) {
         inp.setAttribute("checked", "");
       }
@@ -566,7 +552,6 @@ function addRadio(table, idx, name, data) {
 function addCheckbox(table, idx, name, data) {
   var row = table.insertRow(idx);
   var cell1 = row.insertCell(0);
-  cell1.style.width = ColWidth;
   cell1.classList.add("title");
   if (!data.hasOwnProperty('code')) {
     cell1.innerHTML = `Error: No code specified for ${name}`;
@@ -574,7 +559,6 @@ function addCheckbox(table, idx, name, data) {
   }
   var cell2 = row.insertCell(1);
   cell1.innerHTML = name + '&nbsp;';
-  cell2.style.width = ColWidth;
   if (data.hasOwnProperty('tooltip')) {
     cell1.setAttribute("title", data.tooltip);
   }
@@ -583,7 +567,6 @@ function addCheckbox(table, idx, name, data) {
   inp.setAttribute("id", "input_" + data.code);
   inp.setAttribute("type", "checkbox");
   inp.setAttribute("name", data.code);
-  inp.setAttribute("style", "transform: scale(2); margin: 10px;");
   cell2.appendChild(inp);
 
   if (data.type == 'bool') {
@@ -663,7 +646,6 @@ function configure() {
     var table = document.getElementById("prematch_table")
     var row = table.insertRow(0);
     var cell1 = row.insertCell(0);
-	  cell1.style.width = ColWidth;
     cell1.innerHTML = `Error parsing configuration file: ${err.message}<br><br>Use a tool like <a href="http://jsonlint.com/">http://jsonlint.com/</a> to help you debug your config file`
     return -1
   }
@@ -1018,19 +1000,8 @@ function drawFields(name) {
     var shape = document.getElementById("shape_" + code);
     let shapeArr = shape.value.split(' ');
     var ctx = f.getContext("2d");
-    var imgWidth = img.width;
-    var imgHeight = img.height;
-    let scale_factor = Math.min(ctx.canvas.width / img.width, ctx.canvas.height / img.height);
-    let newWidth = img.width * scale_factor;
-    let newHeight = img.height * scale_factor;
-    if (newWidth > 0) {
-      ctx.canvas.width = newWidth
-    }
-    if (newHeight > 0) {
-      ctx.canvas.height = newHeight
-    }
-    ctx.clearRect(0, 0, newWidth, newHeight);
-    ctx.drawImage(img, 0, 0, newWidth, newHeight);
+    ctx.clearRect(0, 0, f.width, f.height);
+    ctx.drawImage(img, 0, 0, f.width, f.height);
 
     var xyStr = document.getElementById("XY_" + code).value
     if (JSON.stringify(xyStr).length > 2) {
@@ -1368,7 +1339,7 @@ function newCycle(event) {
     tempValue.push(cycleTime);
     cycleInput.value = JSON.stringify(tempValue);
     let d = document.getElementById("display" + base);
-    d.value = cycleInput.value.replace(/\"/g,'').replace(/\[/g, '').replace(/\]/g, '').replace(/,/g, ', ');
+    d.value = cycleInput.value.replace(/\"/g, '').replace(/\[/g, '').replace(/\]/g, '').replace(/,/g, ', ');
   }
 }
 
@@ -1381,7 +1352,7 @@ function undoCycle(event) {
   tempValue.pop();
   cycleInput.value = JSON.stringify(tempValue);
   let d = document.getElementById("display" + uId);
-  d.value = cycleInput.value.replace(/\"/g,'').replace(/\[/g, '').replace(/\]/g, '').replace(/,/g, ', ');
+  d.value = cycleInput.value.replace(/\"/g, '').replace(/\[/g, '').replace(/\]/g, '').replace(/,/g, ', ');
 }
 
 function resetTimer(event) {
@@ -1406,9 +1377,9 @@ function resetTimer(event) {
 function timer(event) {
   let timerID = event.firstChild;
   let tId = getIdBase(timerID.id)
-  timerStatus = document.getElementById("status_" + tId);
-  startButton = document.getElementById("start_" + tId);
-  intervalIdField = document.getElementById("intervalId_" + tId);
+  timerStatus = document.getElementById("status" + tId);
+  startButton = document.getElementById("start" + tId);
+  intervalIdField = document.getElementById("intervalId" + tId);
   var statusValue = timerStatus.value;
   var intervalId = intervalIdField.value;
   if (statusValue == 'stopped') {
@@ -1416,7 +1387,7 @@ function timer(event) {
     startButton.setAttribute("value", "Stop");
 
     var intId = setInterval(() => {
-      if (document.getElementById("status_" + tId).value == 'started') {
+      if (document.getElementById("status" + tId).value == 'started') {
         inp = document.getElementById("input" + tId);
         var t = parseFloat(inp.value);
         t += 0.1;
