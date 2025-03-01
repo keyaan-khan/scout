@@ -3,7 +3,7 @@ const API_CACHE = 'api-v3';
 const CACHE_EXPIRATION = 24 * 60 * 60 * 1000; // 24 hours
 
 // Core assets to cache
-const REPO_NAME = '/sct';
+const REPO_NAME = '/scout';
 const STATIC_ASSETS = [ `${REPO_NAME}/`, `${REPO_NAME}/index.html`, `${REPO_NAME}/pit.html`,
     `${REPO_NAME}/2025/field_image.png`,`${REPO_NAME}/2025/reefscape_config.js`,`${REPO_NAME}/2025/reefscape_pit_scouting.js`,
     `${REPO_NAME}/resources/css/style.css`, `${REPO_NAME}/resources/js/scoutingApp.js`,
