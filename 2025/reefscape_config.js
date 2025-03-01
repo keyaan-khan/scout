@@ -18,7 +18,7 @@ var config_data = `
         "name": "Event",
         "code": "e",
         "type": "event",
-        "defaultValue": "2025milac",
+        "defaultValue": "2020caln",
         "required": "true"
       },
       {
@@ -27,7 +27,8 @@ var config_data = `
         "type": "level",
         "choices": {
           "qm": "Quals<br>",
-          
+          "sf": "Semifinals<br>",
+          "f": "Finals"
         },
         "defaultValue": "qm",
         "required": "true"
